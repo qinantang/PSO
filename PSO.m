@@ -1,0 +1,9 @@
+SwarmSize=input('种群数量：');
+ParticleSize=input('粒子维数：');
+ParticleScope=input('粒子运动范围：');
+Maxgen=input('迭代次数：');
+Count=input('计算次数：');
+Var=input('01变量的数量：');
+Int=input('整形变量的数量：');
+Filter=input('筛选因子：');
+[Position,Result]=PsoProcess(SwarmSize,ParticleSize,ParticleScope,Maxgen,Count,Var,Int,Filter);
