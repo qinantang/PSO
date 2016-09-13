@@ -1,23 +1,23 @@
 function [Position,Result]=PsoProcess(SwarmSize,ParticleSize,ParticleScope,Maxgen,Count,Var,Int,Filter)
 %[ParSwarm,OptSwarm,BadSwarm]=InitSwarm(SwarmSize,ParticleSize,ParticleScope,AdaptFunc)
  %
- %ÊäÈë²ÎÊý£ºSwarmSize:ÖÖÈº´óÐ¡µÄ¸öÊý
- %ÊäÈë²ÎÊý£ºParticleSize£ºÒ»¸öÁ£×ÓµÄÎ¬Êý,±äÁ¿°´01±äÁ¿£¬ÕûÐÎ±äÁ¿£¬·ÇÕûÐÍ±äÁ¿Ë³ÐòÅÅÁÐ£»
- %ÊäÈë²ÎÊý£ºParticleScope:Ò»¸öÁ£×ÓÔÚÔËËãÖÐ¸÷Î¬µÄ·¶Î§£»
- %¡¡¡¡ParticleScope¸ñÊ½:
- %¡¡¡¡3Î¬Á£×ÓµÄParticleScope¸ñÊ½:
+ %è¾“å…¥å‚æ•°ï¼šSwarmSize:ç§ç¾¤å¤§å°çš„ä¸ªæ•°
+ %è¾“å…¥å‚æ•°ï¼šParticleSizeï¼šä¸€ä¸ªç²’å­çš„ç»´æ•°,å˜é‡æŒ‰01å˜é‡ï¼Œæ•´å½¢å˜é‡ï¼Œéžæ•´åž‹å˜é‡é¡ºåºæŽ’åˆ—ï¼›
+ %è¾“å…¥å‚æ•°ï¼šParticleScope:ä¸€ä¸ªç²’å­åœ¨è¿ç®—ä¸­å„ç»´çš„èŒƒå›´ï¼›
+ %ã€€ã€€ParticleScopeæ ¼å¼:
+ %ã€€ã€€3ç»´ç²’å­çš„ParticleScopeæ ¼å¼:
  %                               [x1Min,x1Max]
- %¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡  x2Min,x2Max
+ %ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€  x2Min,x2Max
  %                                x3Min,x3Max]
  %
- %ÊäÈë²ÎÊý£ºAdaptFunc£ºÊÊÓ¦¶Èº¯Êý
- %ÊäÈë²ÎÊý£ºMaxgen£ºµü´ú´ÎÊý
- %ÊäÈë²ÎÊý£ºNum£ºÖØ¸´¼ÆËã´ÎÊý
- %ÊäÈë²ÎÊý£ºVar£º01±äÁ¿µÄ¸öÊý
- %ÊäÈë²ÎÊý£ºInt£ºÕûÐÎ±äÁ¿µÄ¸öÊý    
- %ÊäÈë²ÎÊý£ºFilter£ºÉ¸Ñ¡Òò×Ó£¬¸ù¾ÝÊÊÓ¦¶Èº¯ÊýÈ·¶¨
- %Êä³ö£ºResult µü´ú¹ý³ÌÖÐµÄÈ«¾Ö×îÓÅ½â
- %Êä³ö£ºParticle È«¾Ö×îÓÅ½âµÄÎ»ÖÃ
+ %è¾“å…¥å‚æ•°ï¼šAdaptFuncï¼šé€‚åº”åº¦å‡½æ•°
+ %è¾“å…¥å‚æ•°ï¼šMaxgenï¼šè¿­ä»£æ¬¡æ•°
+ %è¾“å…¥å‚æ•°ï¼šNumï¼šé‡å¤è®¡ç®—æ¬¡æ•°
+ %è¾“å…¥å‚æ•°ï¼šVarï¼š01å˜é‡çš„ä¸ªæ•°
+ %è¾“å…¥å‚æ•°ï¼šIntï¼šæ•´å½¢å˜é‡çš„ä¸ªæ•°    
+ %è¾“å…¥å‚æ•°ï¼šFilterï¼šç­›é€‰å› å­ï¼Œæ ¹æ®é€‚åº”åº¦å‡½æ•°ç¡®å®š
+ %è¾“å‡ºï¼šResult è¿­ä»£è¿‡ç¨‹ä¸­çš„å…¨å±€æœ€ä¼˜è§£
+ %è¾“å‡ºï¼šParticle å…¨å±€æœ€ä¼˜è§£çš„ä½ç½®
 
  Result=zeros(Count,Maxgen);
  Position=zeros(Count,ParticleSize);
@@ -27,8 +27,8 @@ for i=1:Count
        [ParSwarm,OptSwarm,MaxValue]=BaseStepPso(ParSwarm,OptSwarm,ParticleScope,Int,Var,MaxV,j,Maxgen);
        Result(i,j)=MaxValue;
        %{
-       %Èç¹ûËùÓÐÁ£×Ó¶¼¾Û¼¯ÔÚÒ»Æð»òÕßÊÊÓ¦¶ÈµÄ²îÐ¡ÓÚÒ»¸öÓÅ»¯¹ý³Ì¿ÉÒÔ½ÓÊÜµÄÐ¡Êý£¬½áÊøµü´ú
-       %Ìá¸ßÔËËãÐ§ÂÊ,µ«Ò²ÈÝÒ×ÏÝÈë¾Ö²¿×îÓÅ½â
+       %å¦‚æžœæ‰€æœ‰ç²’å­éƒ½èšé›†åœ¨ä¸€èµ·æˆ–è€…é€‚åº”åº¦çš„å·®å°äºŽä¸€ä¸ªä¼˜åŒ–è¿‡ç¨‹å¯ä»¥æŽ¥å—çš„å°æ•°ï¼Œç»“æŸè¿­ä»£
+       %æé«˜è¿ç®—æ•ˆçŽ‡,ä½†ä¹Ÿå®¹æ˜“é™·å…¥å±€éƒ¨æœ€ä¼˜è§£
        Delta=0.01;
        Logic=1;
        for k=1:SwarmSize
@@ -45,11 +45,11 @@ for i=1:Count
        end
        %}
    end
-   %Ã¿´ÎÖØ¸´¼ÆËãµÄ×îÓÅÎ»ÖÃ
-   Position(i,:)=OptSwarm(SwarmSize+1,:);  
+   %æ¯æ¬¡é‡å¤è®¡ç®—çš„æœ€ä¼˜ä½ç½®
+   %Position(i,:)=OptSwarm(SwarmSize+1,:);  
 end
-
-%Êä³ö½á¹û
+Position(ï¼š,:)=OptSwarm(SwarmSize+1,:);
+%è¾“å‡ºç»“æžœ
 %disp(Result);
 %disp(Particle)
 end
