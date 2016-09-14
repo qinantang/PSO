@@ -211,7 +211,7 @@ for row=1:ParRow
 end
 
 
-
+%{
 %在迭代过程中加入随机粒子,充当变异因素，避免陷入局部最优解；
 if CurCount<1*LoopCount/4 && CurCount>1*LoopCount/2
     k=ceil(ParRow*random('Poisson',0,0.5));
@@ -272,7 +272,7 @@ if CurCount<1*LoopCount/4 && CurCount>1*LoopCount/2
       end
      end
 end
-
+%}
 
 
 
