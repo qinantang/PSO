@@ -1,47 +1,47 @@
 function [ParSwarm,OptSwarm,MaxValue]=BaseStepPso(ParSwarm,OptSwarm,ParticleScope,Int,Var,MaxV,CurCount,LoopCount)
-%¹¦ÄÜÃèÊö£ºÈ«¾Ö°æ±¾£º»ù±¾µÄÁ£×ÓÈºËã·¨µÄµ¥²½¸üĞÂÎ»ÖÃ,ËÙ¶ÈµÄËã·¨
+%åŠŸèƒ½æè¿°ï¼šå…¨å±€ç‰ˆæœ¬ï¼šåŸºæœ¬çš„ç²’å­ç¾¤ç®—æ³•çš„å•æ­¥æ›´æ–°ä½ç½®,é€Ÿåº¦çš„ç®—æ³•
 %
 %[ParSwarm,OptSwarm]=BaseStepPso(ParSwarm,OptSwarm,AdaptFunc,ParticleScope,MaxV)
 %
-%ÊäÈë²ÎÊı£ºParSwarm:Á£×ÓÈº¾ØÕó£¬°üº¬Á£×ÓµÄÎ»ÖÃ£¬ËÙ¶ÈÓëµ±Ç°µÄÄ¿±êº¯ÊıÖµ
-%ÊäÈë²ÎÊı£ºOptSwarm£º°üº¬Á£×ÓÈº¸öÌå×îÓÅ½âÓëÈ«¾Ö×îÓÅ½âµÄÎ»ÖÃ
-%ÊäÈë²ÎÊı£ºParticleScope:Ò»¸öÁ£×ÓÔÚÔËËãÖĞ¸÷Î¬µÄ·¶Î§£»
-%ÊäÈë²ÎÊı£ºAdaptFunc£ºÊÊÓ¦¶Èº¯Êı
-%ÊäÈë²ÎÊı£ºInt: ±äÁ¿£¨Á£×ÓÎ¬Êı£©ÖĞÕûÊı±äÁ¿µÄ¸öÊı
-%ÊäÈë²ÎÊı:MaxV×î´óËÙ¶È,-MaxV×îĞ¡ËÙ¶È,ÉèÕıÎŞÇîÎªËÙ¶ÈÕı·½Ïò
-%ÊäÈë²ÎÊı:LoopCountµü´ú×ÜÊı
+%è¾“å…¥å‚æ•°ï¼šParSwarm:ç²’å­ç¾¤çŸ©é˜µï¼ŒåŒ…å«ç²’å­çš„ä½ç½®ï¼Œé€Ÿåº¦ä¸å½“å‰çš„ç›®æ ‡å‡½æ•°å€¼
+%è¾“å…¥å‚æ•°ï¼šOptSwarmï¼šåŒ…å«ç²’å­ç¾¤ä¸ªä½“æœ€ä¼˜è§£ä¸å…¨å±€æœ€ä¼˜è§£çš„ä½ç½®
+%è¾“å…¥å‚æ•°ï¼šParticleScope:ä¸€ä¸ªç²’å­åœ¨è¿ç®—ä¸­å„ç»´çš„èŒƒå›´ï¼›
+%è¾“å…¥å‚æ•°ï¼šAdaptFuncï¼šé€‚åº”åº¦å‡½æ•°
+%è¾“å…¥å‚æ•°ï¼šInt: å˜é‡ï¼ˆç²’å­ç»´æ•°ï¼‰ä¸­æ•´æ•°å˜é‡çš„ä¸ªæ•°
+%è¾“å…¥å‚æ•°:MaxVæœ€å¤§é€Ÿåº¦,-MaxVæœ€å°é€Ÿåº¦,è®¾æ­£æ— ç©·ä¸ºé€Ÿåº¦æ­£æ–¹å‘
+%è¾“å…¥å‚æ•°:LoopCountè¿­ä»£æ€»æ•°
 
 
-%Êä³ö²ÎÊı£ºParSwarm£º¸üĞÂºóµÄÁ£×ÓÈº¾ØÕó
-%Êä³ö²ÎÊı£ºOptSwarm£º¸üĞÂºóµÄÁ£×Ó×îÓÅ½âÓëÈº×îÓÅ½âÎ»ÖÃ¾ØÕó
-%Êä³ö²ÎÊı£ºMaxValue£ºÈº×îÓÅ½âµÄÊÊÓ¦¶ÈÖµ£¨Èô²ÉÓÃ·£º¯Êı·¨MaxValue¾ÍÊÇ×îÓÅ½â£©
+%è¾“å‡ºå‚æ•°ï¼šParSwarmï¼šæ›´æ–°åçš„ç²’å­ç¾¤çŸ©é˜µ
+%è¾“å‡ºå‚æ•°ï¼šOptSwarmï¼šæ›´æ–°åçš„ç²’å­æœ€ä¼˜è§£ä¸ç¾¤æœ€ä¼˜è§£ä½ç½®çŸ©é˜µ
+%è¾“å‡ºå‚æ•°ï¼šMaxValueï¼šç¾¤æœ€ä¼˜è§£çš„é€‚åº”åº¦å€¼ï¼ˆè‹¥é‡‡ç”¨ç½šå‡½æ•°æ³•MaxValueå°±æ˜¯æœ€ä¼˜è§£ï¼‰
 
 
-%¿ªÊ¼µ¥²½¸üĞÂµÄ²Ù×÷
-%µÃµ½Á£×ÓÈºÈºÌå´óĞ¡ÒÔ¼°Ò»¸öÁ£×ÓÎ¬ÊıµÄĞÅÏ¢
+%å¼€å§‹å•æ­¥æ›´æ–°çš„æ“ä½œ
+%å¾—åˆ°ç²’å­ç¾¤ç¾¤ä½“å¤§å°ä»¥åŠä¸€ä¸ªç²’å­ç»´æ•°çš„ä¿¡æ¯
 [ParRow,ParCol]=size(ParSwarm);
-%µÃµ½Á£×ÓµÄÁĞÊı
+%å¾—åˆ°ç²’å­çš„åˆ—æ•°
 ParCol=(ParCol-1)/2;
 
 
 %*********************************************
-%*****¹ßĞÔÒò×Ó²ÎÊı*****
-%****²»Í¬ÎÊÌâ£¬ºÃµÄ¹ßĞÔÒò×ÓÒ²²»Í¬***************
+%*****æƒ¯æ€§å› å­å‚æ•°*****
+%****ä¸åŒé—®é¢˜ï¼Œå¥½çš„æƒ¯æ€§å› å­ä¹Ÿä¸åŒ***************
 
 %{
-%ÏßĞÎµİ¼õ²ßÂÔ£¬ÒªÇó½ÏĞ¡²½³¤
+%çº¿å½¢é€’å‡ç­–ç•¥ï¼Œè¦æ±‚è¾ƒå°æ­¥é•¿
 w=zeros(1,ParCol);
 for i=1:ParCol
    w(1,i)=MaxV(i)-CurCount*((MaxV(i)+MaxV(i))/LoopCount);
 end
 %}
 
-%Ëæ»úÈ¨ÖØ
+%éšæœºæƒé‡
 w=zeros(1,ParCol);
 w(1,:)=random('unif',0.4,0.6,1,ParCol);
 
 %{
-%w¹Ì¶¨²»±ä²ßÂÔ
+%wå›ºå®šä¸å˜ç­–ç•¥
 w=zeros(1,ParCol);
 for i=1:ParCol
    w(1,i)=0.7;
@@ -49,7 +49,7 @@ end
 %}
 
 %{
-%w·ÇÏßĞÎµİ¼õ£¬ÒÔ°¼º¯Êıµİ¼õ
+%wéçº¿å½¢é€’å‡ï¼Œä»¥å‡¹å‡½æ•°é€’å‡
 w=zeros(1,ParCol);
 for i=1:ParCol
     w(1,i)=(MaxV(i)-MinV(i))*(CurCount/LoopCount)^2+(MinV(i)-MaxV(i))*(2*CurCount/LoopCount)+MaxV(i);
@@ -57,7 +57,7 @@ end
 %}
 
 %{
-%w·ÇÏßĞÎµİ¼õ£¬ÒÔ°¼º¯Êıµİ¼õ
+%wéçº¿å½¢é€’å‡ï¼Œä»¥å‡¹å‡½æ•°é€’å‡
 w=zeros(1,ParCol);
 for i=1:ParCol
     w(1,i)=MinV(i)*(MaxV(i)/MinV(i))^(1/(1+10*CurCount/LoopCount));
@@ -68,7 +68,7 @@ end
 
 
 %*********************************************
-%*****ËÙ¶È¸üĞÂ²ÎÊı*****
+%*****é€Ÿåº¦æ›´æ–°å‚æ•°*****
 c1=2;
 c2=2;
 %
@@ -82,7 +82,7 @@ c2=2;
 
 
 %*********************************************
-%*****Ô¼ÊøÒò×Ó*****
+%*****çº¦æŸå› å­*****
 %
 %a=1;
 %
@@ -93,23 +93,24 @@ a=0.729;
 
 
 
-%ËÙ¶ÈÎ»ÖÃ¾ØÕó£»
+%é€Ÿåº¦ä½ç½®çŸ©é˜µï¼›
 TempV=zeros(ParRow,ParCol);
 TempPos=zeros(ParRow,ParCol);
-%Êµ¼ÊÎ»ÖÃÓëÁ£×Ó×îÓÅÎ»ÖÃÖ®¼äµÄ²î£»
+%å®é™…ä½ç½®ä¸ç²’å­æœ€ä¼˜ä½ç½®ä¹‹é—´çš„å·®ï¼›
 SubTract1=OptSwarm(1:ParRow,:)-ParSwarm(:,1:ParCol);
 
-%³õÊ¼ÖÖÈº×îÓÅ½â
+%åˆå§‹ç§ç¾¤æœ€ä¼˜è§£
 MaxValue=AdaptFunc(OptSwarm(ParRow+1,:));
-
-for row=1:ParRow
-    %Êµ¼ÊÎ»ÖÃÓëÈº×îÓÅ½âÖ®¼äµÄ²î£»
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%row
+for col=1:ParCol
+    %å®é™…ä½ç½®ä¸ç¾¤æœ€ä¼˜è§£ä¹‹é—´çš„å·®ï¼›
     SubTract2=OptSwarm(ParRow+1,:)-ParSwarm(row,1:ParCol);
-    %¸üĞÂËÙ¶È
+    %æ›´æ–°é€Ÿåº¦
     for col=1:ParCol
         TempV(row,col)=w(1,col)*ParSwarm(row,ParCol+col)+c1*random('unif',0,1).*SubTract1(row,col)+c2*random('unif',0,1).*SubTract2(col);
     end
-    %ÏŞÖÆÁ£×ÓËÙ¶È£»
+    %é™åˆ¶ç²’å­é€Ÿåº¦ï¼›
     for i=1:ParCol
         if TempV(row,i)>MaxV(i);
             TempV(row,i)=MaxV(i);
@@ -120,22 +121,22 @@ for row=1:ParRow
     end
     ParSwarm(row,ParCol+1:2*ParCol)=TempV(row,:);
   
-     %Î»ÖÃ¸üĞÂ£»
+     %ä½ç½®æ›´æ–°ï¼›
      for i=1:col
          TempPos(row,i)=ParSwarm(row,i)+a*TempV(row,i);
      end
      
-      %ÕûĞÎ±äÁ¿ºÍ01±äÁ¿µÄ´¦Àí
+      %æ•´å½¢å˜é‡å’Œ01å˜é‡çš„å¤„ç†
       if Var>0 && Int>0
          for i=1:Var
-             TempPos(row,i)=round(TempPos(row,i));     %ËÄÉáÎåÈë;
+             TempPos(row,i)=round(TempPos(row,i));     %å››èˆäº”å…¥;
          end 
          for i=Var+1:Int+Var
-             %TempPos(row,i)=floor(TempPos(row,i));    %¸º·½ÏòÈ¡Õû;
-             %TempPos(row,i)=ceil(TempPos(row,i));     %Õı·½ÏòÈ¡Õû;
-             TempPos(row,i)=round(TempPos(row,i));    %ËÄÉáÎåÈë;
-             %TempPos(row,i)=fix(TempPos(row,i));      %È¡ÀëÁã½üµÄÕûÊı;
-             %Èç¹ûÕûĞÎ±äÁ¿µÄ¶¨ÒåÓò²»ÊÇÕûÊı
+             %TempPos(row,i)=floor(TempPos(row,i));    %è´Ÿæ–¹å‘å–æ•´;
+             %TempPos(row,i)=ceil(TempPos(row,i));     %æ­£æ–¹å‘å–æ•´;
+             TempPos(row,i)=round(TempPos(row,i));    %å››èˆäº”å…¥;
+             %TempPos(row,i)=fix(TempPos(row,i));      %å–ç¦»é›¶è¿‘çš„æ•´æ•°;
+             %å¦‚æœæ•´å½¢å˜é‡çš„å®šä¹‰åŸŸä¸æ˜¯æ•´æ•°
              if TempPos(row,i)>ParticleScope(i,2)
                   TempPos(row,i)=TempPos(row,i)-1;
              elseif TempPos(row,i)<ParticleScope(i,1)
@@ -144,15 +145,15 @@ for row=1:ParRow
          end
       elseif Var>0
               for i=1:Var
-                 TempPos(row,i)=round(TempPos(row,i));     %ËÄÉáÎåÈë;
+                 TempPos(row,i)=round(TempPos(row,i));     %å››èˆäº”å…¥;
               end 
       elseif Int>0
               for i=1:Int
-                 %TempPos(row,i)=floor(TempPos(row,i));    %¸º·½ÏòÈ¡Õû;
-                 %TempPos(row,i)=ceil(TempPos(row,i));     %Õı·½ÏòÈ¡Õû;
-                 TempPos(row,i)=round(TempPos(row,i));    %ËÄÉáÎåÈë;
-                 %TempPos(row,i)=fix(TempPos(row,i));       %È¡ÀëÁã½üµÄÕûÊı;
-                 %Èç¹ûÕûĞÎ±äÁ¿µÄ¶¨ÒåÓò²»ÊÇÕûÊı
+                 %TempPos(row,i)=floor(TempPos(row,i));    %è´Ÿæ–¹å‘å–æ•´;
+                 %TempPos(row,i)=ceil(TempPos(row,i));     %æ­£æ–¹å‘å–æ•´;
+                 TempPos(row,i)=round(TempPos(row,i));    %å››èˆäº”å…¥;
+                 %TempPos(row,i)=fix(TempPos(row,i));       %å–ç¦»é›¶è¿‘çš„æ•´æ•°;
+                 %å¦‚æœæ•´å½¢å˜é‡çš„å®šä¹‰åŸŸä¸æ˜¯æ•´æ•°
                  if TempPos(row,i)>ParticleScope(i,2)
                       TempPos(row,i)=TempPos(row,i)-1;
                  elseif ParSwarm(row,i)<ParticleScope(i,1)
@@ -160,7 +161,7 @@ for row=1:ParRow
                  end
               end
       end
-      %ÏŞÖÆÎ»ÖÃ£»
+      %é™åˆ¶ä½ç½®ï¼›
        for i=1:ParCol
            if TempPos(row,i)>=ParticleScope(i,2)
                  TempPos(row,i)=ParticleScope(i,2);
@@ -170,19 +171,19 @@ for row=1:ParRow
            end    
       end
       
-      %²»µÈÊ½Ô¼Êø£¬ÓÃ·£º¯Êı·¨´úÌæ£»
+      %ä¸ç­‰å¼çº¦æŸï¼Œç”¨ç½šå‡½æ•°æ³•ä»£æ›¿ï¼›
       %{
          n=1;
          while(n<100)
-            %Î»ÖÃµÄ³£ÊıÏŞÖÆ
+            %ä½ç½®çš„å¸¸æ•°é™åˆ¶
              if (TempPos(row,1)+TempPos(row,2)+TempPos(row,3)+TempPos(row,4)+TempPos(row,5)<=400)&&((TempPos(row,1)+2*TempPos(row,2)+2*TempPos(row,3)+TempPos(row,4)+6*TempPos(row,5)<=800))&&((2*TempPos(row,1)+TempPos(row,2)+6*TempPos(row,3)<=200))&&((TempPos(row,3)+TempPos(row,4)+5*TempPos(row,5)<=200))
-             %²»µÈÊ½Ô¼Êø
+             %ä¸ç­‰å¼çº¦æŸ
              break;
              else
                  random=rand;
                  for i=1:ParCol
                       TempPos(row,i)=TempPos(row,i)*random;
-                     %Î»ÖÃË¥¼õ£¬¸öÈËÈÏÎª¿ÉÒÔ¿´×÷Ò»¸ö±äÒì£»
+                     %ä½ç½®è¡°å‡ï¼Œä¸ªäººè®¤ä¸ºå¯ä»¥çœ‹ä½œä¸€ä¸ªå˜å¼‚ï¼›
                  end
              end
              n=n+1;
@@ -193,42 +194,42 @@ for row=1:ParRow
            random=rand;
                  for i=1:ParCol
                      TempPos(row,i)=TempPos(row,i)*random;
-                     %Î»ÖÃË¥¼õ£¬¸öÈËÈÏÎª¿ÉÒÔ¿´×÷Ò»¸ö±äÒì£»
+                     %ä½ç½®è¡°å‡ï¼Œä¸ªäººè®¤ä¸ºå¯ä»¥çœ‹ä½œä¸€ä¸ªå˜å¼‚ï¼›
                  end
        end
        %} 
       
      
-     %¸üĞÂÎ»ÖÃ 
+     %æ›´æ–°ä½ç½® 
      ParSwarm(row,1:ParCol)=TempPos(row,:);
-     %¼ÆËãÃ¿¸öÁ£×ÓµÄĞÂµÄÊÊÓ¦¶ÈÖµ
+     %è®¡ç®—æ¯ä¸ªç²’å­çš„æ–°çš„é€‚åº”åº¦å€¼
      ParSwarm(row,2*ParCol+1)=AdaptFunc(ParSwarm(row,1:ParCol));
      if ParSwarm(row,2*ParCol+1)>AdaptFunc(OptSwarm(row,1:ParCol))
          OptSwarm(row,1:ParCol)=ParSwarm(row,1:ParCol);
      end
-     %Ã¿¸öÁ£×ÓÊÊÓ¦¶ÈÖµµÃ¸üĞÂ£»
+     %æ¯ä¸ªç²’å­é€‚åº”åº¦å€¼å¾—æ›´æ–°ï¼›
     
 end
 
 
 %{
-%ÔÚµü´ú¹ı³ÌÖĞ¼ÓÈëËæ»úÁ£×Ó,³äµ±±äÒìÒòËØ£¬±ÜÃâÏİÈë¾Ö²¿×îÓÅ½â£»
+%åœ¨è¿­ä»£è¿‡ç¨‹ä¸­åŠ å…¥éšæœºç²’å­,å……å½“å˜å¼‚å› ç´ ï¼Œé¿å…é™·å…¥å±€éƒ¨æœ€ä¼˜è§£ï¼›
 if CurCount<1*LoopCount/4 && CurCount>1*LoopCount/2
     k=ceil(ParRow*random('Poisson',0,0.5));
     for n=k:ParRow
        ParSwarm(n,:)=random('unif',ParticleScope(i,1),ParticleScope(i,2),1,2*ParCol+1);
        while (1)
-      %ÕûĞÎ±äÁ¿ºÍ01±äÁ¿µÄ´¦Àí
+      %æ•´å½¢å˜é‡å’Œ01å˜é‡çš„å¤„ç†
       if Var>0 && Int>0
          for i=1:Var
-             ParSwarm(n,i)=round(ParSwarm(n,i));    %ËÄÉáÎåÈë;
+             ParSwarm(n,i)=round(ParSwarm(n,i));    %å››èˆäº”å…¥;
          end 
          for i=Var+1:Int+Var
-             %ParSwarm(n,i)=floor(ParSwarm(n,i));    %¸º·½ÏòÈ¡Õû;
-             %ParSwarm(n,i)=ceil(ParSwarm(n,i));     %Õı·½ÏòÈ¡Õû;
-             ParSwarm(n,i)=round(ParSwarm(n,i));     %ËÄÉáÎåÈë;
-             %ParSwarm(n,i)=fix(ParSwarm(n,i));      %È¡ÀëÁã½üµÄÕûÊı;             
-             %Èç¹ûÕûĞÎ±äÁ¿µÄ¶¨ÒåÓò²»ÊÇÕûÊı
+             %ParSwarm(n,i)=floor(ParSwarm(n,i));    %è´Ÿæ–¹å‘å–æ•´;
+             %ParSwarm(n,i)=ceil(ParSwarm(n,i));     %æ­£æ–¹å‘å–æ•´;
+             ParSwarm(n,i)=round(ParSwarm(n,i));     %å››èˆäº”å…¥;
+             %ParSwarm(n,i)=fix(ParSwarm(n,i));      %å–ç¦»é›¶è¿‘çš„æ•´æ•°;             
+             %å¦‚æœæ•´å½¢å˜é‡çš„å®šä¹‰åŸŸä¸æ˜¯æ•´æ•°
              if ParSwarm(n,i)>ParticleScope(i,2)
                  ParSwarm(n,i)=ParSwarm(n,i)-1;
              elseif ParSwarm(n,i)<ParticleScope(i,1)
@@ -237,11 +238,11 @@ if CurCount<1*LoopCount/4 && CurCount>1*LoopCount/2
          end
       elseif Int>0
               for i=1:Int
-                 %ParSwarm(n,i)=floor(ParSwarm(n,i));    %¸º·½ÏòÈ¡Õû;
-                 %ParSwarm(n,i)=ceil(ParSwarm(n,i));     %Õı·½ÏòÈ¡Õû;
-                 ParSwarm(n,i)=round(ParSwarm(n,i));     %ËÄÉáÎåÈë;
-                 %ParSwarm(n,i)=fix(ParSwarm(n,i));      %È¡ÀëÁã½üµÄÕûÊı;
-                 %Èç¹ûÕûĞÎ±äÁ¿µÄ¶¨ÒåÓò²»ÊÇÕûÊı
+                 %ParSwarm(n,i)=floor(ParSwarm(n,i));    %è´Ÿæ–¹å‘å–æ•´;
+                 %ParSwarm(n,i)=ceil(ParSwarm(n,i));     %æ­£æ–¹å‘å–æ•´;
+                 ParSwarm(n,i)=round(ParSwarm(n,i));     %å››èˆäº”å…¥;
+                 %ParSwarm(n,i)=fix(ParSwarm(n,i));      %å–ç¦»é›¶è¿‘çš„æ•´æ•°;
+                 %å¦‚æœæ•´å½¢å˜é‡çš„å®šä¹‰åŸŸä¸æ˜¯æ•´æ•°
                  if ParSwarm(n,i)>ParticleScope(i,2)
                      ParSwarm(n,i)=ParSwarm(n,i)-1;
                  elseif ParSwarm(n,i)<ParticleScope(i,1)
@@ -251,21 +252,21 @@ if CurCount<1*LoopCount/4 && CurCount>1*LoopCount/2
              
       elseif Var>0
               for i=1:Var
-                 ParSwarm(n,i)=round(ParSwarm(n,i));    %ËÄÉáÎåÈë;
+                 ParSwarm(n,i)=round(ParSwarm(n,i));    %å››èˆäº”å…¥;
               end 
       else
       end
-      %ÀûÓÃÉ¸Ñ¡Òò×ÓÆÀ¼Û³öÊÂÁ£×Ó£¬
+      %åˆ©ç”¨ç­›é€‰å› å­è¯„ä»·å‡ºäº‹ç²’å­ï¼Œ
       if AdaptFunc(ParSwarm(n,:))>-Filter 
-           %³õÊ¼ËÙ¶ÈÉèÖÃ£¬ÏµÊı0.2¿Éµ÷
+           %åˆå§‹é€Ÿåº¦è®¾ç½®ï¼Œç³»æ•°0.2å¯è°ƒ
            ParSwarm(n,ParticleSize:2*ParticleSize)=coefV*random('unif',0,1)*ParSwarm(n,ParticleSize:2*ParticleSize);
            break;
       else
            ParSwarm(n,:)=random('unif',ParticleScope(n,1),ParticleScope(n,2),1,2*ParticleSize+1);
-           %unif°´Æ½¾ù·Ö²¼Éú³ÉËæ»úÎ»ÖÃ£¬norm°´ÕıÌ¬·Ö²¼Éú³ÉËæ»úÎ»ÖÃ£¬poiss°´²´Î÷·Ö²¼Éú³ÉËæ»úÎ»ÖÃ¡£
+           %unifæŒ‰å¹³å‡åˆ†å¸ƒç”Ÿæˆéšæœºä½ç½®ï¼ŒnormæŒ‰æ­£æ€åˆ†å¸ƒç”Ÿæˆéšæœºä½ç½®ï¼ŒpoissæŒ‰æ³Šè¥¿åˆ†å¸ƒç”Ÿæˆéšæœºä½ç½®ã€‚
       end
        end
-      %ÊÊÓ¦¶È¸üĞÂ£¬×îÓÅÎ»ÖÃ¸üĞÂ
+      %é€‚åº”åº¦æ›´æ–°ï¼Œæœ€ä¼˜ä½ç½®æ›´æ–°
       ParSwarm(n,2*ParCol+1)=AdaptFunc(ParSwarm(n,1:ParCol));
       if ParSwarm(n,2*ParCol+1)>AdaptFunc(OptSwarm(n,1:ParCol))
          OptSwarm(n,1:ParCol)=ParSwarm(n,1:ParCol);
@@ -276,12 +277,12 @@ end
 
 
 
-%È«¾Ö×îÓÅ½âÎ»ÖÃ¸üĞÂ
+%å…¨å±€æœ€ä¼˜è§£ä½ç½®æ›´æ–°
 [Max,row]=max(ParSwarm(:,2*ParCol+1));
 if  Max>MaxValue
-    %×îÓÅÎ»ÖÃ¸üĞÂ
+    %æœ€ä¼˜ä½ç½®æ›´æ–°
     OptSwarm(ParRow+1,:)=ParSwarm(row,1:ParCol);
-    %×îÓÅ½â¸üĞÂ
+    %æœ€ä¼˜è§£æ›´æ–°
     MaxValue=Max;
 end
 end
