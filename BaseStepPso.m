@@ -207,7 +207,73 @@ for row=1:ParRow
          OptSwarm(row,1:ParCol)=ParSwarm(row,1:ParCol);
      end
      %每个粒子适应度值得更新；
+    
 end
+
+
+
+%在迭代过程中加入随机粒子,充当变异因素，避免陷入局部最优解；
+if CurCount<1*LoopCount/4 && CurCount>1*LoopCount/2
+    k=ceil(ParRow*random('Poisson',0,0.5));
+    for n=k:ParRow
+       ParSwarm(n,:)=random('unif',ParticleScope(i,1),ParticleScope(i,2),1,2*ParCol+1);
+       while (1)
+      %整形变量和01变量的处理
+      if Var>0 && Int>0
+         for i=1:Var
+             ParSwarm(n,i)=round(ParSwarm(n,i));    %四舍五入;
+         end 
+         for i=Var+1:Int+Var
+             %ParSwarm(n,i)=floor(ParSwarm(n,i));    %负方向取整;
+             %ParSwarm(n,i)=ceil(ParSwarm(n,i));     %正方向取整;
+             ParSwarm(n,i)=round(ParSwarm(n,i));     %四舍五入;
+             %ParSwarm(n,i)=fix(ParSwarm(n,i));      %取离零近的整数;             
+             %如果整形变量的定义域不是整数
+             if ParSwarm(n,i)>ParticleScope(i,2)
+                 ParSwarm(n,i)=ParSwarm(n,i)-1;
+             elseif ParSwarm(n,i)<ParticleScope(i,1)
+                 ParSwarm(n,i)=ParSwarm(n,i)+1;
+             end
+         end
+      elseif Int>0
+              for i=1:Int
+                 %ParSwarm(n,i)=floor(ParSwarm(n,i));    %负方向取整;
+                 %ParSwarm(n,i)=ceil(ParSwarm(n,i));     %正方向取整;
+                 ParSwarm(n,i)=round(ParSwarm(n,i));     %四舍五入;
+                 %ParSwarm(n,i)=fix(ParSwarm(n,i));      %取离零近的整数;
+                 %如果整形变量的定义域不是整数
+                 if ParSwarm(n,i)>ParticleScope(i,2)
+                     ParSwarm(n,i)=ParSwarm(n,i)-1;
+                 elseif ParSwarm(n,i)<ParticleScope(i,1)
+                     ParSwarm(n,i)=ParSwarm(n,i)+1;
+                 end
+              end
+             
+      elseif Var>0
+              for i=1:Var
+                 ParSwarm(n,i)=round(ParSwarm(n,i));    %四舍五入;
+              end 
+      else
+      end
+      %利用筛选因子评价出事粒子，
+      if AdaptFunc(ParSwarm(n,:))>-Filter 
+           %初始速度设置，系数0.2可调
+           ParSwarm(n,ParticleSize:2*ParticleSize)=coefV*random('unif',0,1)*ParSwarm(n,ParticleSize:2*ParticleSize);
+           break;
+      else
+           ParSwarm(n,:)=random('unif',ParticleScope(n,1),ParticleScope(n,2),1,2*ParticleSize+1);
+           %unif按平均分布生成随机位置，norm按正态分布生成随机位置，poiss按泊西分布生成随机位置。
+      end
+       end
+      %适应度更新，最优位置更新
+      ParSwarm(n,2*ParCol+1)=AdaptFunc(ParSwarm(n,1:ParCol));
+      if ParSwarm(n,2*ParCol+1)>AdaptFunc(OptSwarm(n,1:ParCol))
+         OptSwarm(n,1:ParCol)=ParSwarm(n,1:ParCol);
+      end
+     end
+end
+
+
 
 
 %全局最优解位置更新
