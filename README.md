@@ -5,7 +5,10 @@ Particle Swarm Optimization
 Working on Matlab
 
 基本函数：
-PsoProcess   主函数，包括参数的输入，结果输出，种群的迭代计算，多次重复计算
+
+PSO          主函数，包括参数的输入，结果输出
+
+PsoProcess   种群的迭代计算，多次重复计算
 
 InitSwarm    生成初始种群
 
