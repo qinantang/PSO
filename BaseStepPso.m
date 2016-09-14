@@ -28,14 +28,17 @@ ParCol=(ParCol-1)/2;
 %*****惯性因子参数*****
 %****不同问题，好的惯性因子也不同***************
 
-
-%线形递减策略
+%{
+%线形递减策略，要求较小步长
 w=zeros(1,ParCol);
 for i=1:ParCol
    w(1,i)=MaxV(i)-CurCount*((MaxV(i)+MaxV(i))/LoopCount);
 end
+%}
 
-
+%随机权重
+w=zeros(1,ParCol);
+w(1,:)=random('unif',0.4,0.6,1,ParCol);
 
 %{
 %w固定不变策略
