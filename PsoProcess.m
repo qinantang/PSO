@@ -27,7 +27,7 @@ for i=1:Count
        [ParSwarm,OptSwarm,MaxValue]=BaseStepPso(ParSwarm,OptSwarm,ParticleScope,Int,Var,MaxV,j,Maxgen);
        Result(i,j)=MaxValue;
        %{
-       %如果所有粒子都聚集在一起或者适应度的差小于一个优化过程可以接受的小数，进行变异？？？？？？？？？
+       %如果所有粒子都聚集在一起或者适应度的差小于一个优化过程可以接受的小数，结束迭代
        %提高运算效率,但也容易陷入局部最优解
        Delta=0.01;
        Logic=1;
