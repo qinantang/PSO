@@ -46,9 +46,9 @@ for i=1:Count
        %}
    end
    %每次重复计算的最优位置
-   %Position(i,:)=OptSwarm(SwarmSize+1,:);  
+   Position(i,:)=OptSwarm(SwarmSize+1,:);  
 end
-Position(：,:)=OptSwarm(SwarmSize+1,:);
+
 %输出结果
 %disp(Result);
 %disp(Particle)
